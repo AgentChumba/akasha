@@ -31,12 +31,23 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     localeLayout->addLayout(bottomLayout);
 
     setCentralWidget(withCombo);
+    /*  Так можно попробовать фон поставить
+    withCombo->setStyleSheet(
+        "background-image: url(:/background.jpg);"
+        "background-repeat: no-repeat;"
+        "background-position: center;"
+        "background-size: cover;"    
+    );
+    */
 
     // Связываем собыытия
     connect(loginWidget, &LoginWidget::switchToReg, this, &MainWindow::showRegistration);
-    connect(registrationWidget, &RegistrationWidget::switchToLogin, this, &MainWindow::showLogin);
     connect(loginWidget, &LoginWidget::loginSuccessful, this, &MainWindow::showHome);
+    
+    connect(registrationWidget, &RegistrationWidget::switchToLogin, this, &MainWindow::showLogin);
+    
     connect(homeWidget, &HomeWidget::logoutRequested, this, &MainWindow::showLogin);
+    // Еще функции по: аккаунту, лидерборду, турнирам, настройки лаунчера
 
     // Начальное окно - логин
     showLogin();
@@ -45,16 +56,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 void MainWindow::showLogin()
 {
     stackedWidget->setCurrentWidget(loginWidget);
+    languageComboBox->show();
 }
 
 void MainWindow::showRegistration()
 {
     stackedWidget->setCurrentWidget(registrationWidget);
+    languageComboBox->show();
 }
 
 void MainWindow::showHome()
 {
     stackedWidget->setCurrentWidget(homeWidget);
+    languageComboBox->hide();
 }
 
 void MainWindow::switchLanguage(const QString &languageCode)

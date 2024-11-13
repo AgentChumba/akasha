@@ -20,3 +20,5 @@ HEADERS += \
 
 TRANSLATIONS += locales/akasha_ru.ts \
                 locales/akasha_en.ts
+
+RESOURCES += res/resources.qrc

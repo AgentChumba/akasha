@@ -20,10 +20,17 @@ signals:
     void switchToLogin();               // Для перехода к логину
 
 private:
-    //QLineEdit *usernameField;           // Поле для ввода имени пользователя
-    //QLineEdit *passwordField;           // Поле для ввода пароля
-    //QPushButton *registerButton;        // Кнопка для завершения регистрации
-    QPushButton *loginButton;           // Кнопка для перехода на экран логина
+    QLineEdit *usernameField;           // Поля
+    QLineEdit *passField;
+    QLineEdit *passConfirmField;
+    
+    QPushButton *regButton;             // Кнопка завершения регистрации
+    QPushButton *regViaDiscordButton;   // Регистрация через Discord
+    QPushButton *regViaHoYoLabButton;   // Регистрация через HoYoLab
+    QPushButton *loginButton;           // Кнопка перехода на экран логина
+
+    QFrame *line1;                  // Разделители
+    QFrame *line2;
 };
 
 #endif // REGISTRATIONWIDGET_H
