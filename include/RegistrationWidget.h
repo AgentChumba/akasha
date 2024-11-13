@@ -8,18 +8,22 @@
 
 class RegistrationWidget : public QWidget
 {
+
     Q_OBJECT
+
 public:
     explicit RegistrationWidget(QWidget *parent = nullptr);
 
+    void retranslateUi();               // Смена локали
+
 signals:
-    void switchToLogin();
+    void switchToLogin();               // Для перехода к логину
 
 private:
-    QPushButton *registerButton;
-    QPushButton *switchToLoginButton;
-    QLineEdit *usernameField;
-    QLineEdit *passwordField;
+    //QLineEdit *usernameField;           // Поле для ввода имени пользователя
+    //QLineEdit *passwordField;           // Поле для ввода пароля
+    //QPushButton *registerButton;        // Кнопка для завершения регистрации
+    QPushButton *loginButton;           // Кнопка для перехода на экран логина
 };
 
 #endif // REGISTRATIONWIDGET_H

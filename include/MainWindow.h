@@ -3,8 +3,13 @@
 
 #include <QMainWindow>
 #include <QStackedWidget>
+#include <QTranslator>
+#include <QComboBox>
+#include <QApplication>
+
 #include "LoginWidget.h"
 #include "RegistrationWidget.h"
+#include "HomeWidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -13,13 +18,20 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
 
 private:
-    QStackedWidget *stackedWidget;
-    LoginWidget *loginWidget;
-    RegistrationWidget *registrationWidget;
+    QStackedWidget *stackedWidget;          // Виджет для переключения между экранами
+    LoginWidget *loginWidget;               // Экран логина
+    RegistrationWidget *registrationWidget; // Экран регистрации
+    HomeWidget *homeWidget;                 // Домашний экран после успешного входа
+
+    QComboBox *languageComboBox;            // Выпадающее меню языка
+    QTranslator translator;                 // Переводчик для смены языка
+    QString currentLanguage;                // Текущий код языка
 
 private slots:
-    void showLogin();
-    void showRegistration();
+    void showLogin();                                   // Отображение экрана логина
+    void showRegistration();                            // Отображение экрана регистрации
+    void showHome();                                    // Отображение домашнего экрана
+    void switchLanguage(const QString &languageCode);   // Переключение языка
 };
 
 #endif // MAINWINDOW_H
