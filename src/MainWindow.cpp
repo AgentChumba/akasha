@@ -1,90 +1,55 @@
 #include "../include/MainWindow.h"
+#include "../include/LoginWindow.h"
+#include "../include/RegisterWindow.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
-{
-    // Создание общего виджета и его частей
-    stackedWidget       = new QStackedWidget(this);
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent), currentWidget(nullptr) {
     
-    loginWidget         = new LoginWidget(this);
-    registrationWidget  = new RegistrationWidget(this);
-    homeWidget          = new HomeWidget(this);
+    setWindowTitle("A.K.A.S.H.A.");
+    setMinimumSize(800, 600);
 
-    // Добавляем виджеты в общий пул
-    stackedWidget->addWidget(loginWidget);
-    stackedWidget->addWidget(registrationWidget);
-    stackedWidget->addWidget(homeWidget);
-    setCentralWidget(stackedWidget);
-
-    // Выпадающее меню языка
-    languageComboBox = new QComboBox(this);
-    languageComboBox->addItem("English", "en");
-    languageComboBox->addItem("Русский", "ru");
-
-   // Создаём макет для размещения ComboBox
-    QWidget *withCombo = new QWidget(this);
-    QVBoxLayout *localeLayout = new QVBoxLayout(withCombo);
-    localeLayout->addWidget(stackedWidget);
-
-    QHBoxLayout *bottomLayout = new QHBoxLayout();
-    bottomLayout->addSpacerItem(new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
-    bottomLayout->addWidget(languageComboBox);
-    localeLayout->addLayout(bottomLayout);
-
-    setCentralWidget(withCombo);
-    /*  Так можно попробовать фон поставить
-    withCombo->setStyleSheet(
-        "background-image: url(:/background.jpg);"
-        "background-repeat: no-repeat;"
-        "background-position: center;"
-        "background-size: cover;"    
-    );
-    */
-
-    // Связываем собыытия
-    connect(loginWidget, &LoginWidget::switchToReg, this, &MainWindow::showRegistration);
-    connect(loginWidget, &LoginWidget::loginSuccessful, this, &MainWindow::showHome);
-    
-    connect(registrationWidget, &RegistrationWidget::switchToLogin, this, &MainWindow::showLogin);
-    
-    connect(homeWidget, &HomeWidget::logoutRequested, this, &MainWindow::showLogin);
-    // Еще функции по: аккаунту, лидерборду, турнирам, настройки лаунчера
-
-    // Начальное окно - логин
-    showLogin();
+    showLogin(); // Начинаем с экрана логина
 }
 
-void MainWindow::showLogin()
-{
-    stackedWidget->setCurrentWidget(loginWidget);
-    languageComboBox->show();
+MainWindow::~MainWindow() {
+    if (currentWidget)
+        delete currentWidget;
 }
 
-void MainWindow::showRegistration()
-{
-    stackedWidget->setCurrentWidget(registrationWidget);
-    languageComboBox->show();
-}
-
-void MainWindow::showHome()
-{
-    stackedWidget->setCurrentWidget(homeWidget);
-    languageComboBox->hide();
-}
-
-void MainWindow::switchLanguage(const QString &languageCode)
-{
-    QString qmFilePath = "../locales/akasha_" + languageCode + ".qm";
-
-    if (translator.load(qmFilePath)) {
-        qApp->installTranslator(&translator);
-        currentLanguage = languageCode;
-
-        // Переводим интерфейс
-        loginWidget->retranslateUi();
-        registrationWidget->retranslateUi();
-        homeWidget->retranslateUi();
-        languageComboBox->setItemText(languageComboBox->findData(languageCode), tr("Сменить язык"));
-    } else {
-        // Warning
+void MainWindow::showLogin() {
+    if (currentWidget) {
+        delete currentWidget;
     }
+
+    currentWidget = new LoginWindow(this);
+    setCentralWidget(currentWidget);
+}
+
+void MainWindow::showRegister() {
+    if (currentWidget) {
+        delete currentWidget;
+    }
+
+    currentWidget = new RegisterWindow(this);
+    setCentralWidget(currentWidget);
+}
+
+void MainWindow::showPlaceholder() {
+    if (currentWidget) {
+        delete currentWidget;
+    }
+
+    QWidget *placeholder = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(placeholder);
+
+    QLabel *label = new QLabel("Welcome to akasha!", placeholder);
+    QPushButton *backButton = new QPushButton("Back to Login", placeholder);
+
+    layout->addWidget(label);
+    layout->addWidget(backButton);
+
+    connect(backButton, &QPushButton::clicked, this, &MainWindow::showLogin);
+
+    placeholder->setLayout(layout);
+    setCentralWidget(placeholder);
 }
